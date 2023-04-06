@@ -7,6 +7,16 @@
 - jinja2 3.0.3
 - sqlalchemy 1.4.29
 
+### Пример работы:
+на главной странице в поле "Длинная ссылка" вставляем ссылку которую хотим укоротить:
+```
+https://yandex.ru/search/?text=github&lr=240&clid=2270456&search_source=yaru_desktop_common&src=suggest_B
+```
+Получаем:
+```
+http://127.0.0.1:5000/f7wgGQ
+```
+
 ### Как запустить проект:
 Клонировать репозиторий:
 ```
@@ -22,19 +32,37 @@ python -m venv venv
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
-Запустить:
+Выполнить миграции и запустить:
 ```
+flask db init
+flask db migrate
+flask db upgrade
 flask run
 ```
-### Пример работы:
-на главной странице в поле "Длинная ссылка" вставляем ссылку которую хотим укоротить:
+
+## [Cпецификации API](https://github.com/russ044/yacut/blob/master/openapi.yml)
+Доступные endpoints:
 ```
-https://yandex.ru/search/?text=github&lr=240&clid=2270456&search_source=yaru_desktop_common&src=suggest_B
+/api/id/
+/api/id/{short_id}/
 ```
-Получаем:
+
+Создание короткой ссылки:
 ```
-http://127.0.0.1:5000/f7wgGQ
+Запрос: POST  /api/id/
+Тело запроса:
+{
+    "url": "string",
+    "custom_id": "string",
+}
 ```
+
+Получение полного URL по короткой ссылке:
+```
+Запрос: GET  /api/id/{short_id}/
+```
+
+
 
 ### Автор проекта:
 - Емцов А.В.  [russ044](https://github.com/russ044)
