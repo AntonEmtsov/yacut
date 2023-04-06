@@ -4,21 +4,14 @@ from datetime import datetime
 from flask import url_for
 
 from settings import (FIELD_LENGHT_ORIGINAL, FIELD_LENGHT_SHORT,
-                      NUMBER_LINK_GENERATION, NUMBER_SYMBOLS)
+                      NUMBER_LINK_GENERATION, NUMBER_SYMBOLS, SYMBOLS)
 
 from . import db
-from .constants import SYMBOLS
 from .error_handlers import InvalidAPIUsage
 
-ID_NOT_FOUND_ERROR = 'Указанный id не найден'
 INVALID_NAME_ERROR = 'Указано недопустимое имя для короткой ссылки'
 NAME_ALREADY_USE_ERROR = 'Имя "{name}" уже занято.'
-NAME_ALREADY_USE_ERROR_VIEWS = 'Имя {name} уже занято!'
-REQUEST_MISSING_ERROR = 'Отсутствует тело запроса'
-REQUIRED_FIELD_ERROR = 'Обязательное поле'
-SYMBOLS_ERROR = 'Только буквы и цифры'
-URL_REQUIRED_FIELD_ERROR = '"url" является обязательным полем!'
-FAILED_GENERATE_LINK = 'Не удалось сгенерировать ссылку'
+FAILED_GENERATE_LINK = 'Не удалось сгенерировать ссылку!'
 
 
 class URLMap(db.Model):
@@ -47,7 +40,7 @@ class URLMap(db.Model):
             short_id = ''.join(random.choices(SYMBOLS, k=NUMBER_SYMBOLS))
             if not URLMap.get(short=short_id).first():
                 return short_id
-        raise InvalidAPIUsage('Не удалось сгенерировать ссылку')
+        raise InvalidAPIUsage(FAILED_GENERATE_LINK)
 
     @staticmethod
     def get(**kwargs):
@@ -64,7 +57,7 @@ class URLMap(db.Model):
 
     @staticmethod
     def validate_short(custom_id):
-        if len(custom_id) > 16:
+        if len(custom_id) > FIELD_LENGHT_SHORT:
             raise InvalidAPIUsage(INVALID_NAME_ERROR)
         if set(custom_id).difference(SYMBOLS):
             raise InvalidAPIUsage(INVALID_NAME_ERROR)

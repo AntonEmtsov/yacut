@@ -1,9 +1,10 @@
 from flask import flash, redirect, render_template
 
 from . import app
-from .constants import NAME_ALREADY_USE_ERROR_VIEWS
 from .forms import URLForm
 from .models import URLMap
+
+NAME_ALREADY_USE_ERROR_VIEWS = 'Имя {name} уже занято!'
 
 
 @app.route('/', methods=['GET', 'POST'])
