@@ -9,9 +9,9 @@ from settings import (FIELD_LENGHT_ORIGINAL, FIELD_LENGHT_SHORT,
 from . import db
 from .error_handlers import InvalidAPIUsage
 
+FAILED_GENERATE_LINK = 'Не удалось сгенерировать ссылку!'
 INVALID_NAME_ERROR = 'Указано недопустимое имя для короткой ссылки'
 NAME_ALREADY_USE_ERROR = 'Имя "{name}" уже занято.'
-FAILED_GENERATE_LINK = 'Не удалось сгенерировать ссылку!'
 
 
 class URLMap(db.Model):
@@ -27,12 +27,11 @@ class URLMap(db.Model):
     def to_dict(self):
         return dict(
             url=self.original,
-            short_link=url_for(
-                'redirect_view',
-                short=self.short,
-                _external=True,
-            )
+            short_link=self.get_short_url()
         )
+
+    def get_short_url(self):
+        return url_for('redirect_view', short=self.short, _external=True)
 
     @staticmethod
     def get_unique_short_id():

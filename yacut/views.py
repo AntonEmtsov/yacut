@@ -12,16 +12,19 @@ def index_view():
     form = URLForm()
     if not form.validate_on_submit():
         return render_template('index.html', form=form)
-    if URLMap.get(short=form.custom_id.data).first():
-        flash(NAME_ALREADY_USE_ERROR_VIEWS.format(name=form.custom_id.data))
+    short = form.custom_id.data
+    if URLMap.get(short=short).first():
+        flash(NAME_ALREADY_USE_ERROR_VIEWS.format(name=short))
         return render_template('index.html', form=form)
+    if not short:
+        short = URLMap.get_unique_short_id()
     return render_template(
         'index.html',
         form=form,
-        url=URLMap.create_url(
+        short_link=URLMap.create_url(
             original=form.original_link.data,
-            short=form.custom_id.data or URLMap.get_unique_short_id(),
-        ),
+            short=short
+        ).get_short_url(),
     )
 
 

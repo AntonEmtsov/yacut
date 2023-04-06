@@ -6,8 +6,8 @@ from . import app
 from .error_handlers import InvalidAPIUsage
 from .models import URLMap
 
-REQUEST_MISSING_ERROR = 'Отсутствует тело запроса'
 ID_NOT_FOUND_ERROR = 'Указанный id не найден'
+REQUEST_MISSING_ERROR = 'Отсутствует тело запроса'
 URL_REQUIRED_FIELD_ERROR = '"url" является обязательным полем!'
 
 

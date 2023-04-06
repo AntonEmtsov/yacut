@@ -6,8 +6,8 @@ from settings import FIELD_LENGHT_ORIGINAL, FIELD_LENGHT_SHORT, REGEX
 
 CREATE = 'Создать'
 ORIGINAL_LINK = 'Длинная ссылка'
-SHORT_LINK = 'Ваш вариант короткой ссылки'
 REQUIRED_FIELD_ERROR = 'Обязательное поле'
+SHORT_LINK = 'Ваш вариант короткой ссылки'
 SYMBOLS_ERROR = 'Только буквы и цифры'
 
 
