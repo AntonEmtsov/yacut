@@ -1,7 +1,7 @@
 from flask import abort, flash, redirect, render_template
 
 from . import app
-from .error_handlers import InvalidUsage
+from .error_handlers import InvalidAPIUsage
 from .forms import URLForm
 from .models import URLMap
 
@@ -24,7 +24,7 @@ def index_view():
             form=form,
             short_link=url_map.get_short_url(),
         )
-    except InvalidUsage as error:
+    except InvalidAPIUsage as error:
         flash(error.message)
         return render_template('index.html', form=form)
 

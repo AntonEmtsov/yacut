@@ -9,7 +9,7 @@ from settings import (MAX_LENGHT_ORIGINAL_LINK, MAX_LENGHT_SHORT_LINK,
                       VALID_SYMBOLS_SHORT_LINK)
 
 from . import db
-from .error_handlers import InvalidUsage
+from .error_handlers import InvalidAPIUsage
 
 FAILED_GENERATE_LINK = 'Не удалось сгенерировать ссылку!'
 INVALID_NAME_ERROR = 'Указано недопустимое имя для короткой ссылки'
@@ -45,7 +45,7 @@ class URLMap(db.Model):
             ))
             if not URLMap.get(short=short_id):
                 return short_id
-        raise InvalidUsage(FAILED_GENERATE_LINK)
+        raise InvalidAPIUsage(FAILED_GENERATE_LINK)
 
     @staticmethod
     def get(**kwargs):
@@ -56,11 +56,11 @@ class URLMap(db.Model):
         if not short:
             short = URLMap.get_unique_short_id()
         elif len(short) > MAX_LENGHT_SHORT_LINK:
-            raise InvalidUsage(INVALID_NAME_ERROR)
+            raise InvalidAPIUsage(INVALID_NAME_ERROR)
         elif set(short).difference(REGEX_SHORT_LINK):
-            raise InvalidUsage(INVALID_NAME_ERROR)
+            raise InvalidAPIUsage(INVALID_NAME_ERROR)
         elif URLMap.get(short=short):
-            raise InvalidUsage(
+            raise InvalidAPIUsage(
                 NAME_ALREADY_USE_ERROR.format(name=short) if flag else
                 NAME_ALREADY_USE_ERROR_VIEWS.format(name=short)
             )
