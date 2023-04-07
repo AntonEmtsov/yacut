@@ -3,7 +3,7 @@ from http import HTTPStatus
 from flask import jsonify, request
 
 from . import app
-from .error_handlers import InvalidAPIUsage
+from .error_handlers import InvalidUsage
 from .models import URLMap
 
 ID_NOT_FOUND_ERROR = 'Указанный id не найден'
@@ -13,9 +13,9 @@ URL_REQUIRED_FIELD_ERROR = '"url" является обязательным по
 
 @app.route('/api/id/<string:short_id>/', methods=['GET'])
 def get_original(short_id):
-    short = URLMap.get(short=short_id).first()
+    short = URLMap.get(short=short_id)
     if not short:
-        raise InvalidAPIUsage(ID_NOT_FOUND_ERROR, 404)
+        raise InvalidUsage(ID_NOT_FOUND_ERROR, 404)
     return jsonify({'url': short.original}), HTTPStatus.OK
 
 
@@ -23,14 +23,13 @@ def get_original(short_id):
 def add_url():
     data = request.get_json()
     if not data:
-        raise InvalidAPIUsage(REQUEST_MISSING_ERROR)
+        raise InvalidUsage(REQUEST_MISSING_ERROR)
     if 'url' not in data or not data['url']:
-        raise InvalidAPIUsage(URL_REQUIRED_FIELD_ERROR)
-    # custom_id = 'custom_id'
-    if 'custom_id' not in data or not data['custom_id']:
-        short = URLMap.get_unique_short_id()
-    else:
-        short = URLMap.validate_short(data['custom_id'])
-    return jsonify(
-        URLMap.create_url(original=data['url'], short=short).to_dict()
-    ), HTTPStatus.CREATED
+        raise InvalidUsage(URL_REQUIRED_FIELD_ERROR)
+    try:
+        return jsonify(URLMap.create_url_map(
+            original=data['url'],
+            short=data.get('custom_id'),
+        ).to_dict()), HTTPStatus.CREATED
+    except InvalidUsage as error:
+        raise InvalidUsage(message=error.message)

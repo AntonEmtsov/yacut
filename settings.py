@@ -2,13 +2,14 @@ import os
 import re
 from string import ascii_letters, digits
 
-FIELD_LENGHT_ORIGINAL = 2048
-FIELD_LENGHT_SHORT = 16
-NUMBER_LINK_GENERATION = 500
-NUMBER_SYMBOLS = 6
+MAX_LENGHT_ORIGINAL_LINK = 2048
+MAX_LENGHT_SHORT_LINK = 16
+NUMBER_LINK_GENERATION = 5
+NUMBER_RANDOM_SYMBOLS_SHORT_LINK = 6
 
-SYMBOLS = ascii_letters + digits
-REGEX = fr'[{re.escape(str(SYMBOLS))}]'
+VALID_SYMBOLS_SHORT_LINK = ascii_letters + digits
+REGEX_SHORT_LINK = fr'[{re.escape(str(VALID_SYMBOLS_SHORT_LINK))}]'
+REDIRECT_VIEW_NAME = 'redirect_view'
 
 
 class Config(object):

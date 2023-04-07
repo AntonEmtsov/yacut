@@ -1,6 +1,7 @@
-from flask import flash, redirect, render_template
+from flask import abort, flash, redirect, render_template
 
 from . import app
+from .error_handlers import InvalidUsage
 from .forms import URLForm
 from .models import URLMap
 
@@ -12,24 +13,25 @@ def index_view():
     form = URLForm()
     if not form.validate_on_submit():
         return render_template('index.html', form=form)
-    short = form.custom_id.data
-    if URLMap.get(short=short).first():
-        flash(NAME_ALREADY_USE_ERROR_VIEWS.format(name=short))
-        return render_template('index.html', form=form)
-    if not short:
-        short = URLMap.get_unique_short_id()
-    return render_template(
-        'index.html',
-        form=form,
-        short_link=URLMap.create_url(
+    try:
+        url_map = URLMap.create_url_map(
             original=form.original_link.data,
-            short=short
-        ).get_short_url(),
-    )
+            short=form.custom_id.data,
+            flag=None,
+        )
+        return render_template(
+            'index.html',
+            form=form,
+            short_link=url_map.get_short_url(),
+        )
+    except InvalidUsage as error:
+        flash(error.message)
+        return render_template('index.html', form=form)
 
 
 @app.route('/<short>', methods=['GET'])
 def redirect_view(short):
-    return redirect(
-        URLMap.get(short=short).first_or_404().original
-    )
+    short_link = URLMap.get(short=short)
+    if short_link:
+        return redirect(short_link.original)
+    abort(404)
