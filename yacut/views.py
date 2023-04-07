@@ -1,7 +1,7 @@
 from flask import abort, flash, redirect, render_template
 
 from . import app
-from .error_handlers import InvalidAPIUsage
+from .error_handlers import CustomErrorModels
 from .forms import URLForm
 from .models import URLMap
 
@@ -14,7 +14,7 @@ def index_view():
     if not form.validate_on_submit():
         return render_template('index.html', form=form)
     try:
-        url_map = URLMap.create_url_map(
+        url_map = URLMap.create(
             original=form.original_link.data,
             short=form.custom_id.data,
         )
@@ -23,7 +23,7 @@ def index_view():
             form=form,
             short_link=url_map.get_short_url(),
         )
-    except InvalidAPIUsage as error:
+    except CustomErrorModels as error:
         flash(error.message)
         return render_template('index.html', form=form)
 

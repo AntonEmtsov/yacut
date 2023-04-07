@@ -3,7 +3,7 @@ from http import HTTPStatus
 from flask import jsonify, request
 
 from . import app
-from .error_handlers import InvalidAPIUsage
+from .error_handlers import CustomErrorModels, InvalidAPIUsage
 from .models import URLMap
 
 ID_NOT_FOUND_ERROR = 'Указанный id не найден'
@@ -27,10 +27,10 @@ def add_url():
     if 'url' not in data or not data['url']:
         raise InvalidAPIUsage(URL_REQUIRED_FIELD_ERROR)
     try:
-        return jsonify(URLMap.create_url_map(
+        return jsonify(URLMap.create(
             data['url'],
             data.get('custom_id'),
             True,
         ).to_dict()), HTTPStatus.CREATED
-    except InvalidAPIUsage as error:
-        raise InvalidAPIUsage(message=error.message)
+    except (CustomErrorModels, ValueError) as error:
+        raise InvalidAPIUsage(error.message)

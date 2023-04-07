@@ -9,7 +9,7 @@ from settings import (MAX_LENGHT_ORIGINAL_LINK, MAX_LENGHT_SHORT_LINK,
                       REDIRECT_VIEW_NAME, REGEX_SHORT_LINK,
                       VALID_SYMBOLS_SHORT_LINK)
 from . import db
-from .error_handlers import InvalidAPIUsage, CustomErrorModels
+from .error_handlers import CustomErrorModels
 
 FAILED_GENERATE_LINK = 'Не удалось сгенерировать ссылку!'
 INCORRECT_ORIGINAL_URL = 'Не корректный url'
@@ -31,7 +31,7 @@ class URLMap(db.Model):
     def to_dict(self):
         return dict(
             url=self.original,
-            short_link=self.get_short_url()
+            short_link=self.get_short_url(),
         )
 
     def get_short_url(self):
@@ -46,26 +46,26 @@ class URLMap(db.Model):
             ))
             if not URLMap.get(short=short_id):
                 return short_id
-        raise InvalidAPIUsage(FAILED_GENERATE_LINK)
+        raise CustomErrorModels(FAILED_GENERATE_LINK)
 
     @staticmethod
     def get(**kwargs):
         return URLMap.query.filter_by(**kwargs).first()
 
     @staticmethod
-    def create_url_map(original, short=None, api=None):
+    def create(original, short=None, api=None):
         if api:
             if len(original) > MAX_LENGHT_ORIGINAL_LINK:
-                raise InvalidAPIUsage(INCORRECT_ORIGINAL_URL)
+                raise CustomErrorModels(INCORRECT_ORIGINAL_URL)
         if not short:
             short = URLMap.get_unique_short_id()
         elif api:
             if len(short) > MAX_LENGHT_SHORT_LINK:
-                raise InvalidAPIUsage(INVALID_NAME_ERROR)
+                raise CustomErrorModels(INVALID_NAME_ERROR)
             if not re.match(REGEX_SHORT_LINK, short):
-                raise InvalidAPIUsage(INVALID_NAME_ERROR)
+                raise CustomErrorModels(INVALID_NAME_ERROR)
         if URLMap.get(short=short):
-            raise InvalidAPIUsage(
+            raise CustomErrorModels(
                 NAME_ALREADY_USE_ERROR.format(name=short) if api else
                 NAME_ALREADY_USE_ERROR_VIEWS.format(name=short)
             )

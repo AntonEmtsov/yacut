@@ -9,7 +9,6 @@ NUMBER_RANDOM_SYMBOLS_SHORT_LINK = 6
 
 VALID_SYMBOLS_SHORT_LINK = ascii_letters + digits
 REGEX_SHORT_LINK = fr'^[{re.escape(VALID_SYMBOLS_SHORT_LINK)}]*$'
-print(REGEX_SHORT_LINK)
 REDIRECT_VIEW_NAME = 'redirect_view'
 
 
