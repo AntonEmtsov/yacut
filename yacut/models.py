@@ -57,14 +57,14 @@ class URLMap(db.Model):
         if api:
             if len(original) > MAX_LENGHT_ORIGINAL_LINK:
                 raise CustomErrorModels(INCORRECT_ORIGINAL_URL)
+            if short:
+                if len(short) > MAX_LENGHT_SHORT_LINK:
+                    raise CustomErrorModels(INVALID_NAME_ERROR)
+                if not re.match(REGEX_SHORT_LINK, short):
+                    raise CustomErrorModels(INVALID_NAME_ERROR)
         if not short:
             short = URLMap.get_unique_short_id()
-        elif api:
-            if len(short) > MAX_LENGHT_SHORT_LINK:
-                raise CustomErrorModels(INVALID_NAME_ERROR)
-            if not re.match(REGEX_SHORT_LINK, short):
-                raise CustomErrorModels(INVALID_NAME_ERROR)
-        if URLMap.get(short=short):
+        elif URLMap.get(short=short):
             raise CustomErrorModels(
                 NAME_ALREADY_USE_ERROR.format(name=short) if api else
                 NAME_ALREADY_USE_ERROR_VIEWS.format(name=short)
