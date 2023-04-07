@@ -40,7 +40,7 @@ flask run
 ```
 
 ## [Cпецификации API](https://github.com/russ044/yacut/blob/master/openapi.yml)
-Доступные endpoints:
+Endpoints:
 ```
 /api/id/
 /api/id/{short_id}/
@@ -55,7 +55,13 @@ flask run
     "custom_id": "string",
 }
 ```
-
+```
+Запрос: POST  /api/id/
+Тело запроса:
+{
+    "url": "string"
+}
+```
 Получение полного URL по короткой ссылке:
 ```
 Запрос: GET  /api/id/{short_id}/
