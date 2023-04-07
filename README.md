@@ -34,7 +34,6 @@ pip install -r requirements.txt
 ```
 Выполнить миграции и запустить:
 ```
-flask db init
 flask db migrate
 flask db upgrade
 flask run
@@ -65,4 +64,4 @@ flask run
 
 
 ### Автор проекта:
-- Емцов А.В.  [russ044](https://github.com/russ044)
+- Емцов Антон [russ044](https://github.com/russ044)
