@@ -24,7 +24,7 @@ def index_view():
             short_link=url_map.get_short_url(),
         )
     except CustomErrorModels as error:
-        flash(error.message)
+        flash(error)
         return render_template('index.html', form=form)
 
 

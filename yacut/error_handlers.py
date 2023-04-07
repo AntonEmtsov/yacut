@@ -4,9 +4,7 @@ from . import app
 
 
 class CustomErrorModels(Exception):
-    def __init__(self, message):
-        super().__init__()
-        self.message = message
+    pass
 
 
 class InvalidAPIUsage(Exception):

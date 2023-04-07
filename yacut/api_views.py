@@ -33,4 +33,4 @@ def add_url():
             True,
         ).to_dict()), HTTPStatus.CREATED
     except (CustomErrorModels, ValueError) as error:
-        raise InvalidAPIUsage(error.message)
+        raise InvalidAPIUsage(str(error))

@@ -53,8 +53,8 @@ class URLMap(db.Model):
         return URLMap.query.filter_by(**kwargs).first()
 
     @staticmethod
-    def create(original, short=None, api=None):
-        if api:
+    def create(original, short=None, validation=None):
+        if validation:
             if len(original) > MAX_LENGHT_ORIGINAL_LINK:
                 raise CustomErrorModels(INCORRECT_ORIGINAL_URL)
             if short:
@@ -66,7 +66,7 @@ class URLMap(db.Model):
             short = URLMap.get_unique_short_id()
         elif URLMap.get(short=short):
             raise CustomErrorModels(
-                NAME_ALREADY_USE_ERROR.format(name=short) if api else
+                NAME_ALREADY_USE_ERROR.format(name=short) if validation else
                 NAME_ALREADY_USE_ERROR_VIEWS.format(name=short)
             )
         url_map = URLMap(original=original, short=short)
