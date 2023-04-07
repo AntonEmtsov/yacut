@@ -3,6 +3,12 @@ from flask import jsonify, render_template
 from . import app
 
 
+class CustomErrorModels(Exception):
+    def __init__(self, message):
+        super().__init__()
+        self.message = message
+
+
 class InvalidAPIUsage(Exception):
     status_code = 400
 

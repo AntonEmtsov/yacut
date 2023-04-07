@@ -34,7 +34,6 @@ pip install -r requirements.txt
 ```
 Выполнить миграции и запустить:
 ```
-flask db migrate
 flask db upgrade
 flask run
 ```

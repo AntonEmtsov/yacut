@@ -17,7 +17,6 @@ def index_view():
         url_map = URLMap.create_url_map(
             original=form.original_link.data,
             short=form.custom_id.data,
-            flag=None,
         )
         return render_template(
             'index.html',

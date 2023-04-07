@@ -28,8 +28,9 @@ def add_url():
         raise InvalidAPIUsage(URL_REQUIRED_FIELD_ERROR)
     try:
         return jsonify(URLMap.create_url_map(
-            original=data['url'],
-            short=data.get('custom_id'),
+            data['url'],
+            data.get('custom_id'),
+            True,
         ).to_dict()), HTTPStatus.CREATED
     except InvalidAPIUsage as error:
         raise InvalidAPIUsage(message=error.message)

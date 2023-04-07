@@ -1,4 +1,5 @@
 import random
+import re
 from datetime import datetime
 
 from flask import url_for
@@ -7,11 +8,11 @@ from settings import (MAX_LENGHT_ORIGINAL_LINK, MAX_LENGHT_SHORT_LINK,
                       NUMBER_LINK_GENERATION, NUMBER_RANDOM_SYMBOLS_SHORT_LINK,
                       REDIRECT_VIEW_NAME, REGEX_SHORT_LINK,
                       VALID_SYMBOLS_SHORT_LINK)
-
 from . import db
-from .error_handlers import InvalidAPIUsage
+from .error_handlers import InvalidAPIUsage, CustomErrorModels
 
 FAILED_GENERATE_LINK = 'Не удалось сгенерировать ссылку!'
+INCORRECT_ORIGINAL_URL = 'Не корректный url'
 INVALID_NAME_ERROR = 'Указано недопустимое имя для короткой ссылки'
 NAME_ALREADY_USE_ERROR = 'Имя "{name}" уже занято.'
 NAME_ALREADY_USE_ERROR_VIEWS = 'Имя {name} уже занято!'
@@ -52,16 +53,20 @@ class URLMap(db.Model):
         return URLMap.query.filter_by(**kwargs).first()
 
     @staticmethod
-    def create_url_map(original, short=None, flag=True):
+    def create_url_map(original, short=None, api=None):
+        if api:
+            if len(original) > MAX_LENGHT_ORIGINAL_LINK:
+                raise InvalidAPIUsage(INCORRECT_ORIGINAL_URL)
         if not short:
             short = URLMap.get_unique_short_id()
-        elif len(short) > MAX_LENGHT_SHORT_LINK:
-            raise InvalidAPIUsage(INVALID_NAME_ERROR)
-        elif set(short).difference(REGEX_SHORT_LINK):
-            raise InvalidAPIUsage(INVALID_NAME_ERROR)
-        elif URLMap.get(short=short):
+        elif api:
+            if len(short) > MAX_LENGHT_SHORT_LINK:
+                raise InvalidAPIUsage(INVALID_NAME_ERROR)
+            if not re.match(REGEX_SHORT_LINK, short):
+                raise InvalidAPIUsage(INVALID_NAME_ERROR)
+        if URLMap.get(short=short):
             raise InvalidAPIUsage(
-                NAME_ALREADY_USE_ERROR.format(name=short) if flag else
+                NAME_ALREADY_USE_ERROR.format(name=short) if api else
                 NAME_ALREADY_USE_ERROR_VIEWS.format(name=short)
             )
         url_map = URLMap(original=original, short=short)
