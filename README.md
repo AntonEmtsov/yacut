@@ -1,5 +1,5 @@
-# YACUT
-# Укоротитель ссылок
+# YACUT - Укоротитель ссылок
+![2023-07-27_02-28-27](https://github.com/AntonEmtsov/yacut/assets/93160961/768cd02d-fbbb-4e3b-959e-aafe1fcbeee4)
 
 ### Тенологии используемые в проекте:
 - python 3.8
@@ -69,4 +69,4 @@ Endpoints:
 
 
 ### Автор проекта:
-- Емцов Антон [russ044](https://github.com/russ044)
+- [Емцов Антон](https://github.com/AntonEmtsov)
