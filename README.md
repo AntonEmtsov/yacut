@@ -1,6 +1,7 @@
 # YACUT - Укоротитель ссылок
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
 ![2023-07-27_02-28-27](https://github.com/AntonEmtsov/yacut/assets/93160961/768cd02d-fbbb-4e3b-959e-aafe1fcbeee4)
 
 ### Тенологии используемые в проекте:
